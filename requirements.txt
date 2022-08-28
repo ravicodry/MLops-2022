@@ -1,2 +1,3 @@
 matplotlib
 scikit-learn
+nltk==3.5
