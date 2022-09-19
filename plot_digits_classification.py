@@ -13,10 +13,13 @@ hand-written digits, from 0-9.
 from sklearn import datasets, svm, metrics
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
+import numpy as np
 # Standard scientific Python imports
 import matplotlib.pyplot as plt
 from sklearn.metrics import accuracy_score
 import sklearn
+from skimage.transform import rescale, resize
+from skimage import transform
 
 # Import datasets, classifiers and performance metrics
 from sklearn import datasets, svm, metrics
@@ -65,26 +68,47 @@ digits = datasets.load_digits()
 # in the test subset.
 
 # flatten the images
-n_samples = len(digits.images)
-data = digits.images.reshape((n_samples, -1))
-print(digits.images[-1].shape)
+
+
+import numpy as np 
+def resize_a(image,n):
+    image = resize(image, (image.shape[0] // n, image.shape[1] // n),anti_aliasing=True)
+    return image
+def resize_b(image,n):
+    image = resize(image, (image.shape[0]*n, image.shape[1]*n),anti_aliasing=True)
+    return image
+
+
+digits_4 = np.zeros((1797, 2, 2))  # image divide by 4
+digits_2 = np.zeros((1797, 4, 4))  # image divide by 2
+digits_5 = np.zeros((1797, 16, 16))  # image divide by 5
+
+for i in range(0,1797):
+    digits_4[i] = resize_a(digits.images[i],4)
+
+for i in range(0,1797):
+    digits_2[i] = resize_a(digits.images[i],2)
+
+for i in range(0,1797):
+    digits_5[i] = resize_b(digits.images[i],2)
+    
+
+
+
+n_samples = len(digits_5)
+data = digits_5.reshape((n_samples, -1))
+print("imagesize in the digits dataset.")
+print(digits_5[-1].shape)
 train_frac=0.8
 test_frac=0.1
 dev_frac=0.1
-print(data.shape)
+#print(data.shape)
 # Split data into 80% train,10% validate and 10% test subsets
 dev_test_frac=1-train_frac
 
-X_train, X_dev_test, y_train, y_dev_test = train_test_split(data, digits.target, test_size=dev_test_frac, shuffle=True,random_state=42)
+X_train, X_dev_test, y_train, y_dev_test = train_test_split(data ,digits.target, test_size=dev_test_frac, shuffle=True,random_state=42)
 X_test, X_dev, y_test, y_dev = train_test_split(X_dev_test, y_dev_test, test_size=(dev_frac)/dev_test_frac, shuffle=True,random_state=42)
-#print(X_train.shape)
-#print(X_dev_test.shape)
-#print(y_train.shape)
-#print(y_dev_test.shape)
-#print(X_dev.shape)
-#print(X_test.shape)
-#print(y_dev.shape)
-#print(y_test.shape)
+
 best_acc=-1
 best_model=None
 best_h_params=None 
@@ -117,8 +141,8 @@ for com_hyper in h_param_comb:
 	     best_acc=cur_acc_dev
 	     best_model=clf
 	     best_h_params=com_hyper
-	     #print("found new best acc with: "+str(com_hyper))
-	     #print("New best accuracy:"+ " train" + "  "+str(cur_acc_train)+ " "+ "dev" + " "+str(cur_acc_dev)+ " "+ "test" + " " +str(cur_acc_test))
+	     print("found new best acc with: "+str(com_hyper))
+	     print("New best accuracy:"+ " train" + "  "+str(cur_acc_train)+ " "+ "dev" + " "+str(cur_acc_dev)+ " "+ "test" + " " +str(cur_acc_test))
 	     
 predicted = best_model.predict(X_test)
 	###############################################################################
@@ -149,7 +173,7 @@ predicted = best_model.predict(X_test)
 	#print(f"Confusion matrix:\n{disp.confusion_matrix}")
 
 #plt.show()
-#print("Best hyperparameters were: ")
-#print(com_hyper)
-#print("Best accuracy on dev: ")
-#print(best_acc)
+print("Best hyperparameters were: ")
+print(com_hyper)
+print("Best accuracy on dev: ")
+print(best_acc)
