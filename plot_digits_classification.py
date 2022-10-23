@@ -24,6 +24,7 @@ from skimage import transform
 # Import datasets, classifiers and performance metrics
 from sklearn import datasets, svm, metrics
 from sklearn.model_selection import train_test_split
+from utils import preprocess_digits,train_dev_test_split
 
 #hyperparameter tuning
 Gamma_list=[0.01 ,0.001, 0.0001, 0.0005]
@@ -99,9 +100,13 @@ n_samples = len(digits_5)
 data = digits_5.reshape((n_samples, -1))
 print("imagesize in the digits dataset.")
 print(digits_5[-1].shape)
+
+    
 train_frac=0.8
 test_frac=0.1
 dev_frac=0.1
+
+assert train_frac+dev_frac+test_frac==1
 #print(data.shape)
 # Split data into 80% train,10% validate and 10% test subsets
 dev_test_frac=1-train_frac
