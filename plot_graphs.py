@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Nov  7 13:23:33 2022
+
+@author: ravi
+"""
+
 from sklearn import datasets, svm, metrics, tree
 import pdb
 
@@ -23,7 +31,7 @@ svm_params["gamma"] = gamma_list
 svm_params["C"] = c_list
 svm_h_param_comb = get_all_h_param_comb(svm_params)
 
-max_depth_list = [5, 10, 20, 50, 100]
+max_depth_list = [2, 10, 20, 50, 100]
 
 dec_params = {}
 dec_params["max_depth"] = max_depth_list
@@ -41,8 +49,7 @@ del digits
 # define the evaluation metric
 metric_list = [metrics.accuracy_score, macro_f1]
 h_metric = metrics.accuracy_score
-predicted_lable_svm  = list()
-predicted_labels_DecisionTree = list()
+
 n_cv = 5
 results = {}
 for n in range(n_cv):
@@ -68,13 +75,6 @@ for n in range(n_cv):
         # PART: Get test set predictions
         # Predict the value of the digit on the test subset
         predicted = best_model.predict(x_test)
-        if clf_name =='svm':
-    	       predicted_lable_svm = predicted
-        if clf_name =='decision_tree':
-    	       predicted_labels_DecisionTree = predicted
- 
-        print(predicted)
-        print(len(predicted))
         if not clf_name in results:
             results[clf_name]=[]    
 
@@ -87,11 +87,3 @@ for n in range(n_cv):
         )
 
 print(results)
-print(len(predicted_lable_svm))
-print(len(predicted_labels_DecisionTree))
-count=0
-for i in range(len(predicted_lable_svm)):
- 	if predicted_lable_svm[i] != predicted_labels_DecisionTree [i]:
-         count=count+1
-         print("index for which prediction is not matching",i)
-print("Number of time predicted lable were not the same with both the classifier",':',count)
