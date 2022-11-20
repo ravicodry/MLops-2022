@@ -8,6 +8,7 @@ Created on Mon Nov  7 13:23:33 2022
 
 from sklearn import datasets, svm, metrics, tree
 import pdb
+import argparse
 
 from utils import (
     preprocess_digits,

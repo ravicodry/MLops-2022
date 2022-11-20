@@ -1,5 +1,3 @@
-# Reuse of utility class 
-
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score
@@ -144,5 +142,5 @@ def tune_and_save(
     return model_path
 
 
-def f1_scoring(y_true, y_pred, pos_label=1):
+def macro_f1(y_true, y_pred, pos_label=1):
     return f1_score(y_true, y_pred, pos_label=pos_label, average='macro', zero_division='warn')

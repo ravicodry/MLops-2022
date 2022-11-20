@@ -15,7 +15,7 @@ model_path = "svm_gamma=0.001_C=0.5.joblib"
 model = load(model_path)
 @app.route("/")
 def hello_world():
-    return "<!-- hello --> <b> Hello, World!</b>"
+    return "<!-- hello --> <b> True</b>"
 
 
 # get x and y somehow    
